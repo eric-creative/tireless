@@ -7,9 +7,16 @@ module.exports = {
   plugins: [],
 }
 """
-global_css_file_content = """@tailwind base;
+global_css_file_content = """@import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap');
+@tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.permanent-marker-regular {
+    font-family: "Permanent Marker", cursive;
+    font-weight: 400;
+    font-style: normal;
+}
 """
 layout_jinja2_file_content = """<!doctype html>
 <html>
@@ -33,7 +40,9 @@ page_file_template_content = """<!-- page.j2 -->
 
 {% block content %}
     <!-- Your specific content for the index page -->
-    <h1>Welcome to My Flask App + Tireless</h1>
+    <div class="flex h-screen w-full justify-center items-center bg-slate-100">
+        <h1 class="permanent-marker-regular text-5xl">Tireless.</h1>
+    </div>
     <!-- Other content here -->
 {% endblock %}
 
