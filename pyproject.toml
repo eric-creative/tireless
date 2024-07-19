@@ -1,0 +1,29 @@
+[tool.poetry]
+name = "tireless"
+version = "0.1.4"
+description = ""
+authors = ["Eric_Kweyunga <maverickweyunga@gmail.com>"]
+maintainers = ["Eric_Kweyunga <maverickweyunga@gmail.com>"]
+readme = "README.md"
+packages = [{ include = "tireless" }]
+license = "MIT"
+keywords = ["tireless", "flask", "package", "web-package", "Eric Kweyunga", "maverickweyunga@gmail.com"]
+classifiers = [
+    "Programming Language :: Python :: 3"
+]
+
+
+[project.urls]
+Repository = "https://github.com/eric-creative/tireless"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+flask = "^3.0.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+tireless = "tireless.cli:cli"
