@@ -16,6 +16,8 @@ templates = BASE_DIR / 'templates'
 pages = BASE_DIR / 'pages'
 app_wsgi = BASE_DIR / 'app.py'
 
+template_pages_dir = templates / "pages"
+
 
 @click.group()
 def cli() -> None:
@@ -85,9 +87,11 @@ def add(page: str):
             ))
         else:
             if register_blueprints(app_dir=app_wsgi, page=page, BASE_DIR=BASE_DIR, page_temp=page_temp):
+                template_page_dir = template_pages_dir
 
                 # creating respective jinja2 templates for the blueprints
-                with open(BASE_DIR / "templates" / f"{page}.j2", "w+") as f:
+                os.mkdir(template_page_dir / page)
+                with open(template_page_dir / page / 'page.j2', "w+",  encoding="utf-8") as f:
                     f.write(template)
 
                 click.echo(

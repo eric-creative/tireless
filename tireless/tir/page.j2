@@ -12,4 +12,4 @@ def index():
     # you can pass objects, variables from the server to client
     context = {}
     # rendering the {{ page }} jinja/html template on the templates directory
-    return render_template('{{ page }}/page.j2', context=context )
+    return render_template('pages/{{ page }}/page.j2', context=context )
