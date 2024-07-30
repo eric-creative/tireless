@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "tireless"
-version = "0.1.7"
+version = "0.1.0"
 description = ""
 authors = ["Eric_Kweyunga <maverickweyunga@gmail.com>"]
 maintainers = ["Eric_Kweyunga <maverickweyunga@gmail.com>"]

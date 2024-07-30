@@ -13,7 +13,6 @@ app = Flask(__name__, template_folder=template_dir, static_folder=static_dir)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + str(db_dir)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config["SECRET_KEY"] = '61b6607bc18f0d4cf3076e3dd13fea038891b3eaff31696c'
 
 
 def run_tailwindcss_server(stop_event):
