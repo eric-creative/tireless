@@ -1,6 +1,6 @@
 tailwindcss_config_file_content = """/** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./templates/**/*.{html,j2}"],
+  content: ["./tir/**/*.{html,j2}"],
   theme: {
     extend: {},
   },
@@ -19,7 +19,7 @@ global_css_file_content = """@import url('https://fonts.googleapis.com/css2?fami
 }
 """
 layout_jinja2_file_content = """<!doctype html>
-<html>
+<html lang="en">
 <head>
     <title>{% block title %}{% endblock %}</title>
     <meta charset="UTF-8">
@@ -28,15 +28,18 @@ layout_jinja2_file_content = """<!doctype html>
 </head>
     <body>
         {% block content %}{% endblock %}
+        
+        {% if app.debug %}
+            <script src="{{ url_for('static', filename='tireless_hot_reload.js') }}"></script>
+        {% endif %}
     </body>
 </html>
+
 """
 page_file_template_content = """<!-- page.j2 -->
 {% extends "layout.j2" %}
 
-{% block title %}
-	Tireless
-{% endblock %}
+{% block title %}Tireless{% endblock %}
 
 {% block content %}
     <!-- Your specific content for the index page -->
@@ -50,7 +53,7 @@ page_file_template_content = """<!-- page.j2 -->
 page_file_content = """from flask import Blueprint, render_template
 from tireless import app
 
-page = Blueprint('page', __name__, template_folder='templates', static_folder='static')
+bp = Blueprint('page', __name__, template_folder='tir', static_folder='static')
 
 
 @app.route('/')
@@ -58,11 +61,10 @@ def index():
     return render_template('page.j2')
 
 """
-app_file_content = """from tireless import app
-from tireless import run
+app_file_content = """from tireless import app, run
 
 # import the routes
-from pages.page import page
+from pages.page import bp as page
 
 # register the routes
 app.register_blueprint(page)

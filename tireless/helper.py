@@ -3,6 +3,8 @@ import os
 import shutil
 import subprocess
 
+import click
+
 from tireless.inputs import layout_jinja2_file_content, global_css_file_content, page_file_content, \
     page_file_template_content
 
@@ -60,15 +62,15 @@ def collect_static_files(static, templates):
 
         """make static directory"""
         os.mkdir(static)
-        """make template directory"""
+        """make templates directory"""
         os.mkdir(templates)
 
         '''make sub static directory'''
         os.mkdir(css_dir)
         os.mkdir(js_dir)
-        '''make sub template directory'''
+        '''make sub templates directory'''
         with base_template.open('w') as file:
-            file.write("Base template")
+            file.write("Base templates")
 
     except FileExistsError:
         raise FileExistsError(f'Static files seems to be collected before')
@@ -77,7 +79,7 @@ def collect_static_files(static, templates):
 
 
 def jinja_starter_template(template_dir):
-    # making the page template
+    # making the page templates
     os.chdir(template_dir)
 
     page_file = template_dir / 'page.j2'
@@ -87,7 +89,7 @@ def jinja_starter_template(template_dir):
 
 
 def starter_template(template_dir, static_dir, pages_dir):
-    # check if the static and template directory exists
+    # check if the static and templates directory exists
     static_dir_exists = os.path.exists(static_dir)
     template_dir_exists = os.path.exists(template_dir)
     pages_dir_exists = os.path.exists(pages_dir)
@@ -109,7 +111,7 @@ def starter_template(template_dir, static_dir, pages_dir):
             file.close()
 
         if pages_dir_exists:
-            value = input("We found a pages file, would you like to replace it with the new template?(y/n) ")
+            value = input("We found a pages file, would you like to replace it with the new templates?(y/n) ")
 
             if value.lower() == 'y' or value.lower() == 'yes':
                 """delete the pages dir with all what it contains"""
@@ -141,4 +143,37 @@ def starter_template(template_dir, static_dir, pages_dir):
             return True
 
     else:
-        logging.warning('Unable to find template path')
+        logging.warning('Unable to find templates path')
+
+
+def register_blueprints(app_dir, page, BASE_DIR, page_temp) -> bool | None:
+    if os.path.exists(app_dir):
+        # click.echo('registering')
+        with open(BASE_DIR / 'pages' / f'{page}.py', 'w+') as f:
+            f.write(page_temp)
+        # register in app.py
+        with open(app_dir, 'r+') as f:
+            lines = f.readlines()
+            for i, line in enumerate(lines):
+                imported = line.startswith(f"from from pages.{page} import bp as {page}")
+                if imported:
+                    logging.error(f" {page} already registered")
+                    return
+                else:
+                    if line.startswith("from pages.page import bp as page"):
+                        lines[i] = line.strip() + f"\nfrom pages.{page} import bp as {page}\n"
+                    if line.startswith(f"app.register_blueprint(page)"):
+                        lines[i] = line.strip() + f"\napp.register_blueprint({page})\n"
+
+            f.seek(0)
+            for line in lines:
+                f.write(line)
+
+        return True
+    else:
+        logging.error(
+            click.style(
+                f" app.py does not exist", fg='red'
+            )
+        )
+        return False

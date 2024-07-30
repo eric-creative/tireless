@@ -10,3 +10,5 @@ htmlcov/
 docs/_build/
 .pypi
 .pypirc
+database.db
+instance/

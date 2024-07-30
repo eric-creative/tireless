@@ -8,8 +8,12 @@ from tireless.cli import BASE_DIR
 
 template_dir = BASE_DIR / 'templates'
 static_dir = BASE_DIR / 'static'
-
+db_dir = BASE_DIR / 'database.db'
 app = Flask(__name__, template_folder=template_dir, static_folder=static_dir)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + str(db_dir)
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config["SECRET_KEY"] = '61b6607bc18f0d4cf3076e3dd13fea038891b3eaff31696c'
 
 
 def run_tailwindcss_server(stop_event):
@@ -24,7 +28,7 @@ def run_tailwindcss_server(stop_event):
         "--watch",
     ]
 
-    print("Running Tailwind CSS server...")
+    # print("Running Tailwind CSS server...")
     p = subprocess.Popen(
         cmd,
         stdout=subprocess.PIPE,
@@ -41,7 +45,7 @@ def run_tailwindcss_server(stop_event):
             continue
 
     if p.returncode is None:
-        print("Terminating Tailwind CSS server...")
+        # print("Terminating Tailwind CSS server...")
         p.terminate()
         p.wait()
         print("Tailwind CSS server terminated.")
